@@ -1,9 +1,10 @@
-from django.http import HttpResponse
+import django.http as http
+import django.shortcuts as sc
 
 
 def home(request):
-    return HttpResponse('<a href="http://localhost:8000/page1">Page 1</a>')
+    return sc.render(request, 'djangoProject/index.html')
 
 
 def page1(request):
-    return HttpResponse('This is page 1. <a href="http://localhost:8000">Back</a> to home page')
+    return http.HttpResponse('This is page 1. <a href="http://localhost:8000">Back</a> to home page')
