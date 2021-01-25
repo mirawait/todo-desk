@@ -1,76 +1,72 @@
 {% block content %}
-<div class="columns has-background-black-ter is-centered has-text-white-bis" style="min-height:101vh;">
-	<!-- на самом деле можно было обойтись и hero, но я обратился к inline-css -->
-	<div class="column is-half">
-    	<h1 class="is-size-3 has-text-centered"> Список дел </h1>
+<div style="min-height:101vh;">
+	<div>
+    	<h1 > Список дел </h1>
     	<form action="" method="post">
         	{% csrf_token %}
-        	<!-- csrf для базовой безопасности нашего приложения -->
-            <div class="field has-text-centered">
-            	<label for="description" class="label has-text-white-bis">Введите название</label>
-            	<div class="control">
-             	   <input type="text" id="title" class="input" placeholder="Название"
+            <div>
+            	<label for="description">Введите название</label>
+            	<div>
+             	   <input type="text" id="title" placeholder="Название"
                     	name="title" required>
             	</div>
         	</div>
-            <div class="field has-text-centered">
-            	<label for="description" class="label has-text-white-bis">Введите дело</label>
-            	<div class="control">
-             	   <input type="text" id="description" class="input" placeholder="Чем собираетесь заняться?"
+            <div>
+            	<label for="description">Введите описание</label>
+            	<div>
+             	   <input type="text" id="description" placeholder="Описание"
                     	name="description" required>
             	</div>
         	</div>
-        	<div class="columns">
-            	<div class="column">
+        	<div>
+            	<div>
                 	<label for="category">Статус</label>
-                	<div class="control">
-                    	<div class="select">
-                        	<select id="status" class="select" name="status" required>
-                            	<!--поставишь такой required, и не надо пустые поляв бд валидизировать. Не повторять в продакшене-->
-                            	<option class="disabled" value="">Выберите статус таски</option>
+                	<div>
+                    	<div>
+                        	<select id="status" name="status" required>
+                            	<option value="">Выберите статус таски</option>
                     	        {% for status in statuses %}
- 	                           <option class="" value="{{ status }}" name="{{ status }}">
-                                    {{ status }}</option>
+ 	                           <option value="{{ status.0 }}" name="{{ status.0 }}">
+                                    {{ status.0 }}</option>
                             	{% endfor %}
                         	</select>
     	                </div>
                 	</div>
             	</div>
-                <div class="column">
+                <div>
                 	<label for="date_end">Выберите дату завершения</label>
-                	<input type="datetime-local" id="date_end" class="input calendar" name="date_end" required>
+                	<input type="datetime-local" id="date_end" name="date_end" required>
             	</div>
         	</div>
-        	<div class="column">
-            	<div class="field">
-                	<button class="button is-primary" name="Add" type="submit">
-                    	<span class="icon is-small">
-                        	<i class="fa fa-plus"></i>
+        	<div>
+            	<div>
+                	<button name="Add" type="submit">
+                    	<span>
+                        	<i></i>
                     	</span>
-                    	<span>Добавить задание</span>
+                    	<span>Добавить таску</span>
                 	</button>
-             	   <button class="button is-link" name="Delete" formnovalidate="" type="submit">
-                    	<span class="icon is-small">
-                        	<i class="fa fa-trash-o"></i>
+             	   <button name="Delete" formnovalidate="" type="submit">
+                    	<span>
+                        	<i></i>
                     	</span>
                     	<span>
-                        	Удалить дело
+                        	Удалить таску
                     	</span>
                 	</button>
             	</div>
         	</div>
-        	<div class="list is-hoverable">
+        	<div>
             	{% for task in tasks %}
-            	<!-- шаблонный язык django- for loop -->
-            	<div class="list-item">
-                	<label class="checkbox">
-                    	<input type="checkbox" class=" checkbox" name="checkedbox" value="{{ task.id }}">
-                    	<span class="complete-">{{ task.title }}</span>
-                        <span class="complete-">{{ task.description }}</span>
-                	</label>
-                	<span class=" category-{{ task.status }} has-text-info">{{ task.status }}</span>
-                	<strong class="is-pulled-right"><i class="fa fa-calendar"></i>{{ task.date_created }} -
+            	<div>
+                	<label>
+                    	<input type="checkbox" name="checkedbox" value="{{ task.id }}">
+                    	<span>{{ task.title }}</span>
+                        <span>{{ task.description }}</span>
+                        <span>{{ task.status }}</span>
+                	    <strong>{{ task.date_created }} -
                     	{{ task.date_end }}</strong>
+                	</label>
             	</div>
             	{% endfor %}
         	</div>

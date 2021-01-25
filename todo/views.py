@@ -19,5 +19,10 @@ def task(request):
                                 status=status)
             created_task.save()
             return redirect("/")
+        if "Delete" in request.POST:
+            checkedlist = request.POST.getlist('checkedbox')
+            for i in range(len(checkedlist)):
+                tasks = Task.objects.filter(id=int(checkedlist[i]))
+                tasks.delete()
     tasks = Task.objects.all()
     return render(request, "home.html", {"tasks": tasks, "statuses": Task.STATUS_CHOICES})
