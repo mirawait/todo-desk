@@ -30,6 +30,7 @@ ALLOWED_HOSTS = ["localhost", "127.0.0.1", "5.136.106.145"]
 # Application definition
 
 INSTALLED_APPS = [
+    'users.apps.UsersConfig',
     'rest_framework',
     'todo.apps.TodoConfig',
     'django.contrib.admin',
@@ -75,8 +76,12 @@ WSGI_APPLICATION = 'djangoProject.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+        'ENGINE': 'django.db.backends.postgresql_psycopg2',
+        'NAME': 'auth',
+        'USER': 'django_auth',
+        'PASSWORD': 'pass',
+        'HOST': 'localhost',
+        'PORT': '5433'
     }
 }
 
@@ -117,3 +122,9 @@ USE_TZ = True
 STATIC_URL = '/static/'
 PROJECT_ROOT = os.path.dirname(os.path.abspath(__file__))
 STATIC_ROOT = os.path.join(PROJECT_ROOT, 'static')
+
+REST_FRAMEWORK = {
+    'DEFAULT_AUTHENTICATION_CLASSES': (
+        'rest_framework_jwt.authentication.JSONWebTokenAuthentication',
+    ),
+}
