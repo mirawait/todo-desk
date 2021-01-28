@@ -77,11 +77,19 @@ WSGI_APPLICATION = 'djangoProject.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': 'auth',
+        'NAME': 'tasks',
         'USER': 'django_auth',
         'PASSWORD': 'pass',
-        'HOST': 'localhost',
-        'PORT': '5433'
+        'HOST': '127.0.0.1',
+        'PORT': '5432',
+    },
+    'users': {
+        'ENGINE': 'django.db.backends.postgresql_psycopg2',
+        'NAME': 'users',
+        'USER': 'django_auth',
+        'PASSWORD': 'pass',
+        'HOST': '127.0.0.1',
+        'PORT': '5432',
     }
 }
 
@@ -124,7 +132,7 @@ PROJECT_ROOT = os.path.dirname(os.path.abspath(__file__))
 STATIC_ROOT = os.path.join(PROJECT_ROOT, 'static')
 
 REST_FRAMEWORK = {
-    'DEFAULT_AUTHENTICATION_CLASSES': (
-        'rest_framework_jwt.authentication.JSONWebTokenAuthentication',
-    ),
+  'DEFAULT_AUTHENTICATION_CLASSES': (
+    'rest_framework_jwt.authentication.JSONWebTokenAuthentication',
+  ),
 }
