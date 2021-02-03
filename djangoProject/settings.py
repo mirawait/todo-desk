@@ -30,6 +30,7 @@ ALLOWED_HOSTS = ["localhost", "127.0.0.1", "5.136.106.145"]
 # Application definition
 
 INSTALLED_APPS = [
+    'django_extensions',
     'djoser',
     'users.apps.UsersConfig',
     'rest_framework_simplejwt',
@@ -136,8 +137,8 @@ STATIC_ROOT = os.path.join(PROJECT_ROOT, 'static')
 REST_FRAMEWORK = {
   'DEFAULT_AUTHENTICATION_CLASSES': (
     'rest_framework_simplejwt.authentication.JWTAuthentication',
-    'rest_framework.authentication.BasicAuthentication',
-    'rest_framework.authentication.SessionAuthentication',
+    #'rest_framework.authentication.BasicAuthentication',
+    #'rest_framework.authentication.SessionAuthentication',
   ),
 }
 
@@ -149,3 +150,5 @@ DJOSER = {
 SIMPLE_JWT = {
     'AUTH_HEADER_TYPES': ('JWT',)
 }
+
+AUTH_USER_MODEL = 'users.User'

@@ -7,7 +7,7 @@ class TodoRouter:
         Attempts to read auth and contenttypes models go to auth_db.
         """
         if model._meta.app_label in self.route_app_labels:
-            return 'users'
+            return 'default'
         return None
 
     def db_for_write(self, model, **hints):
@@ -15,7 +15,7 @@ class TodoRouter:
         Attempts to write auth and contenttypes models go to auth_db.
         """
         if model._meta.app_label in self.route_app_labels:
-            return 'users'
+            return 'default'
         return None
 
     def allow_relation(self, obj1, obj2, **hints):
@@ -36,5 +36,5 @@ class TodoRouter:
         'auth_db' database.
         """
         if app_label in self.route_app_labels:
-            return db == 'users'
+            return db == 'default'
         return None
