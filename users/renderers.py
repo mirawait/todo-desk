@@ -6,7 +6,11 @@ class UserJSONRenderer(JSONRenderer):
     charset = 'utf-8'
 
     def render(self, data, accepted_media_type=None, renderer_context=None):
+        errors = data.get('errors',None)
         token = data.get('token', None)
+        if errors is not None:
+            return super(UserJSONRenderer, self).render(data)
+
         if token is not None and isinstance(token, bytes):
             data['token'] = token
         return json.dumps({

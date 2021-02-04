@@ -4,7 +4,7 @@ from .models import *
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from .serializers import TaskSerializer
-
+from rest_framework.permissions import IsAuthenticated
 
 def home(request):
     return HttpResponse('ToDo Home')
@@ -32,7 +32,8 @@ def task(request):
 
 
 class TaskView(APIView):
-    def get(self, request):
+    permission_classes = (IsAuthenticated,)
+    def get(self, request, pk):
         tasks = Task.objects.all()
         serializer = TaskSerializer(tasks, many=True)
         return Response({"tasks": serializer.data})
