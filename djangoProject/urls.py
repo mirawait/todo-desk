@@ -22,8 +22,4 @@ urlpatterns = [
     path('api/', include('todo.urls')),
     path('', views.task),
     path('api/', include('users.urls')),
-    # path('api/auth/', include('rest_framework.urls')),
-    path('auth/', include('djoser.urls')),
-    path('auth/', include('djoser.urls.jwt')),
-    # path('page1', views.page1),
 ]

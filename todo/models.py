@@ -1,4 +1,5 @@
 from django.db import models
+from django.urls import reverse
 from django.utils import timezone
 
 
@@ -11,9 +12,13 @@ class Task(models.Model):
     date_created = models.DateTimeField(default=timezone.now)
     date_end = models.DateTimeField(default=timezone.now().strftime("%d.%m.%Y %H:%M"))
     status = models.CharField(max_length=15, choices=STATUS_CHOICES, default="In progress")
-
+    author = models.CharField(max_length=255)
+    slug = models.SlugField(unique=True)
     class Meta:
         ordering = ("-date_created",)
 
     def __str__(self):
         return self.title
+
+    def get_absolute_url(self):
+        return reverse('article_detail', kwargs={'slug': self.slug})
