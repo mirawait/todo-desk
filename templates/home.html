@@ -1,0 +1,76 @@
+{% block content %}
+<div style="min-height:101vh;">
+	<div>
+    	<h1 > Список дел </h1>
+    	<form action="" method="post">
+        	{% csrf_token %}
+            <div>
+            	<label for="description">Введите название</label>
+            	<div>
+             	   <input type="text" id="title" placeholder="Название"
+                    	name="title" required>
+            	</div>
+        	</div>
+            <div>
+            	<label for="description">Введите описание</label>
+            	<div>
+             	   <input type="text" id="description" placeholder="Описание"
+                    	name="description" required>
+            	</div>
+        	</div>
+        	<div>
+            	<div>
+                	<label for="category">Статус</label>
+                	<div>
+                    	<div>
+                        	<select id="status" name="status" required>
+                            	<option value="">Выберите статус таски</option>
+                    	        {% for status in statuses %}
+ 	                           <option value="{{ status.0 }}" name="{{ status.0 }}">
+                                    {{ status.0 }}</option>
+                            	{% endfor %}
+                        	</select>
+    	                </div>
+                	</div>
+            	</div>
+                <div>
+                	<label for="date_end">Выберите дату завершения</label>
+                	<input type="datetime-local" id="date_end" name="date_end" required>
+            	</div>
+        	</div>
+        	<div>
+            	<div>
+                	<button name="Add" type="submit">
+                    	<span>
+                        	<i></i>
+                    	</span>
+                    	<span>Добавить таску</span>
+                	</button>
+             	   <button name="Delete" formnovalidate="" type="submit">
+                    	<span>
+                        	<i></i>
+                    	</span>
+                    	<span>
+                        	Удалить таску
+                    	</span>
+                	</button>
+            	</div>
+        	</div>
+        	<div>
+            	{% for task in tasks %}
+            	<div>
+                	<label>
+                    	<input type="checkbox" name="checkedbox" value="{{ task.id }}">
+                    	<span>{{ task.title }}</span>
+                        <span>{{ task.description }}</span>
+                        <span>{{ task.status }}</span>
+                	    <strong>{{ task.date_created }} -
+                    	{{ task.date_end }}</strong>
+                	</label>
+            	</div>
+            	{% endfor %}
+        	</div>
+    	</form>
+	</div>
+</div>
+{% endblock %}
