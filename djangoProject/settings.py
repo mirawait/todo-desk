@@ -85,14 +85,6 @@ DATABASES = {
         'PASSWORD': 'pass',
         'HOST': '127.0.0.1',
         'PORT': '5432',
-    },
-    'users': {
-        'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': 'users',
-        'USER': 'django_auth',
-        'PASSWORD': 'pass',
-        'HOST': '127.0.0.1',
-        'PORT': '5432',
     }
 }
 
@@ -137,12 +129,15 @@ STATIC_ROOT = os.path.join(PROJECT_ROOT, 'static')
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': (
         'users.backends.JWTAuthentication',
-        #'rest_framework_simplejwt.authentication.JWTAuthentication',
-        #'rest_framework.authentication.BasicAuthentication',
-        #'rest_framework.authentication.SessionAuthentication',
+        # 'rest_framework_simplejwt.authentication.JWTAuthentication',
+        # 'rest_framework.authentication.BasicAuthentication',
+        # 'rest_framework.authentication.SessionAuthentication',
     ),
     'EXCEPTION_HANDLER': 'djangoProject.exceptions.core_exception_handler',
     'NON_FIELD_ERRORS_KEY': 'error',
+    'DEFAULT_PERMISSION_CLASSES': [
+        'rest_framework.permissions.AllowAny',
+    ]
 }
 
 DJOSER = {
