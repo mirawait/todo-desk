@@ -42,6 +42,11 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'dj_rest_auth',
+    'django.contrib.sites',
+    'allauth',
+    'allauth.account',
+    'dj_rest_auth.registration',
 ]
 
 MIDDLEWARE = [
@@ -128,7 +133,7 @@ STATIC_ROOT = os.path.join(PROJECT_ROOT, 'static')
 
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': (
-        'users.backends.JWTAuthentication',
+        'dj_rest_auth.jwt_auth.JWTCookieAuthentication',
         # 'rest_framework_simplejwt.authentication.JWTAuthentication',
         # 'rest_framework.authentication.BasicAuthentication',
         # 'rest_framework.authentication.SessionAuthentication',
@@ -140,13 +145,16 @@ REST_FRAMEWORK = {
     ]
 }
 
-DJOSER = {
-    'ACTIVATION_URL': '#/activate/{uid}/{token}',
-    'SEND_ACTIVATION_EMAIL': False,
-}
+REST_USE_JWT = True
 
-SIMPLE_JWT = {
-    'AUTH_HEADER_TYPES': ('JWT',)
-}
+JWT_AUTH_COOKIE = 'todo-auth'
+
+ACCOUNT_AUTHENTICATION_METHOD = 'username'
+
+ACCOUNT_EMAIL_REQUIRED = False
+
+REST_SESSION_LOGIN = True
 
 AUTH_USER_MODEL = 'users.User'
+
+SITE_ID = 1

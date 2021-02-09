@@ -22,4 +22,6 @@ urlpatterns = [
     path('api/', include('todo.urls')),
     path('', views.task),
     path('api/', include('users.urls')),
+    path('dra/', include('dj_rest_auth.urls')),
+    path('dra/registration/', include('dj_rest_auth.registration.urls')),
 ]
