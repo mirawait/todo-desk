@@ -7,8 +7,7 @@ from rest_framework.response import Response
 from rest_framework.views import APIView
 from .serializers import TaskSerializer
 from rest_framework.permissions import IsAuthenticated
-from users.backends import JWTAuthentication
-
+from dj_rest_auth.views import UserDetailsView
 
 def home(request):
     return HttpResponse('ToDo Home')
@@ -39,31 +38,30 @@ def task(request):
 class TaskView(APIView):
     permission_classes = (IsAuthenticated,)
 
-    def get(self, request):
-        tasks = Task.objects.all()
-        serializer = TaskSerializer(tasks, many=True)
-        return Response({"tasks": serializer.data})
-
-    def get(self, request, slug):
-        task = get_object_or_404(Task.objects.all(), slug=slug)
-        serializer = TaskSerializer(task, many=False)
-        return Response({"tasks": serializer.data})
+    def get(self, request, slug=None):
+        if slug is None:
+            tasks = Task.objects.all()
+            serializer = TaskSerializer(tasks, many=True)
+            return Response({"tasks": serializer.data})
+        else:
+            task = get_object_or_404(Task.objects.all(), slug=slug)
+            serializer = TaskSerializer(task, many=False)
+            return Response({"tasks": serializer.data})
 
     def post(self, request):
         task_api = request.data.get('task')
-        user = JWTAuthentication().authenticate(request)[0]  # выглядит как говно и на вкус также
-        task_api['author'] = user.username
+        token_user = request.user
+        task_api['author'] = token_user.username
         task_api['slug'] = slugify(task_api['title'])
         serializer = TaskSerializer(data=task_api)
         if serializer.is_valid(raise_exception=True):
             task_saved = serializer.save()
         return Response({"success": "Task '{}' created successfully".format(task_saved.title)})
 
-    def put(self, request, pk):
-        print(f"pk={pk}")
-        user = JWTAuthentication().authenticate(request)[0]  # выглядит как говно и на вкус также
-        saved_task = get_object_or_404(Task.objects.all(), pk=pk)
-        if saved_task.author == user.username or user.is_staff:
+    def put(self, request, slug):
+        saved_task = get_object_or_404(Task.objects.all(), slug=slug)
+        token_user = request.user
+        if saved_task.author == token_user.username or token_user.is_staff:
             data = request.data.get('task')
             serializer = TaskSerializer(instance=saved_task, data=data, partial=True)
             if serializer.is_valid(raise_exception=True):

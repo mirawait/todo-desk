@@ -1,7 +1,7 @@
+from django.utils.text import slugify
 from rest_framework import serializers
 from django.utils import timezone
 from .models import Task
-from rest_framework.fields import empty
 
 
 class TaskSerializer(serializers.Serializer):
@@ -21,6 +21,6 @@ class TaskSerializer(serializers.Serializer):
         instance.description = validated_data.get('description', instance.description)
         instance.date_end = validated_data.get('date_end', instance.date_end)
         instance.status = validated_data.get('status', instance.status)
-        instance.slug = validated_data.get('title', instance.slug)
+        instance.slug = slugify(validated_data.get('title', instance.slug))
         instance.save()
         return instance

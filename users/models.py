@@ -28,9 +28,11 @@ class UserManager(BaseUserManager):
         return user
 
 
-class User(AbstractBaseUser,PermissionsMixin):
-    username = models.CharField(db_index=True,max_length=50,unique=True)
-    email = models.EmailField(db_index=True,unique=True)
+class User(AbstractBaseUser, PermissionsMixin):
+    username = models.CharField(db_index=True, max_length=50, unique=True)
+    email = models.EmailField(db_index=True, unique=True)
+    first_name = models.CharField(max_length=50)
+    last_name = models.CharField(max_length=50)
     is_active = models.BooleanField(default=True)
     is_staff = models.BooleanField(default=False)
     created_at = models.DateTimeField(auto_now_add=True)

@@ -9,7 +9,7 @@ https://docs.djangoproject.com/en/3.1/topics/settings/
 For the full list of settings and their values, see
 https://docs.djangoproject.com/en/3.1/ref/settings/
 """
-
+from datetime import timedelta
 from pathlib import Path
 import os
 
@@ -42,6 +42,11 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'dj_rest_auth',
+    'django.contrib.sites',
+    'allauth',
+    'allauth.account',
+    'dj_rest_auth.registration',
 ]
 
 MIDDLEWARE = [
@@ -81,14 +86,6 @@ DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
         'NAME': 'tasks',
-        'USER': 'django_auth',
-        'PASSWORD': 'pass',
-        'HOST': '127.0.0.1',
-        'PORT': '5432',
-    },
-    'users': {
-        'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': 'users',
         'USER': 'django_auth',
         'PASSWORD': 'pass',
         'HOST': '127.0.0.1',
@@ -136,22 +133,32 @@ STATIC_ROOT = os.path.join(PROJECT_ROOT, 'static')
 
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': (
-        'users.backends.JWTAuthentication',
-        #'rest_framework_simplejwt.authentication.JWTAuthentication',
-        #'rest_framework.authentication.BasicAuthentication',
-        #'rest_framework.authentication.SessionAuthentication',
+        'dj_rest_auth.jwt_auth.JWTCookieAuthentication',
+        # 'rest_framework_simplejwt.authentication.JWTAuthentication',
+        # 'rest_framework.authentication.BasicAuthentication',
+        # 'rest_framework.authentication.SessionAuthentication',
     ),
     'EXCEPTION_HANDLER': 'djangoProject.exceptions.core_exception_handler',
     'NON_FIELD_ERRORS_KEY': 'error',
+    'DEFAULT_PERMISSION_CLASSES': [
+        'rest_framework.permissions.AllowAny',
+    ]
 }
 
-DJOSER = {
-    'ACTIVATION_URL': '#/activate/{uid}/{token}',
-    'SEND_ACTIVATION_EMAIL': False,
-}
+REST_USE_JWT = True
 
-SIMPLE_JWT = {
-    'AUTH_HEADER_TYPES': ('JWT',)
-}
+JWT_AUTH_COOKIE = 'todo-auth'
+
+ACCOUNT_AUTHENTICATION_METHOD = 'username'
+
+ACCOUNT_EMAIL_REQUIRED = False
+
+REST_SESSION_LOGIN = True
 
 AUTH_USER_MODEL = 'users.User'
+
+SITE_ID = 1
+
+SIMPLE_JWT = {
+    'ACCESS_TOKEN_LIFETIME': timedelta(days=30),
+}
