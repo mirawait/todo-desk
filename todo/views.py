@@ -1,3 +1,5 @@
+from datetime import datetime
+
 from django.shortcuts import render, redirect, get_object_or_404
 from django.http import HttpResponse
 from django.utils.text import slugify
@@ -7,7 +9,9 @@ from rest_framework.response import Response
 from rest_framework.views import APIView
 from .serializers import TaskSerializer
 from rest_framework.permissions import IsAuthenticated
-from dj_rest_auth.views import UserDetailsView
+
+from todo import numbersAPI
+from todo import weatherAPI
 
 def home(request):
     return HttpResponse('ToDo Home')
@@ -42,11 +46,19 @@ class TaskView(APIView):
         if slug is None:
             tasks = Task.objects.all()
             serializer = TaskSerializer(tasks, many=True)
+            for item in serializer.data:
+                date = datetime.strptime(item.get('date_created'), "%Y-%m-%dT%H:%M:%S.%f%z")
+                item['fact'] = numbersAPI.get_fact(date.month, date.day)
+                item['weather'] = weatherAPI.get_weather('Tomsk')
             return Response({"tasks": serializer.data})
         else:
             task = get_object_or_404(Task.objects.all(), slug=slug)
             serializer = TaskSerializer(task, many=False)
-            return Response({"tasks": serializer.data})
+            item = serializer.data
+            date = datetime.strptime(item.get('date_created'), "%Y-%m-%dT%H:%M:%S.%f%z")
+            item['fact'] = numbersAPI.get_fact(date.month, date.day)
+            item['weather'] = weatherAPI.get_weather('Tomsk')
+            return Response({"tasks": item})
 
     def post(self, request):
         task_api = request.data.get('task')
@@ -65,7 +77,7 @@ class TaskView(APIView):
             data = request.data.get('task')
             serializer = TaskSerializer(instance=saved_task, data=data, partial=True)
             if serializer.is_valid(raise_exception=True):
-               updated_task = serializer.save()
+                updated_task = serializer.save()
             return Response({"success": "Task '{}' was updated".format(updated_task.title)})
 
         else:
