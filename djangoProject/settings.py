@@ -30,6 +30,7 @@ ALLOWED_HOSTS = ["localhost", "127.0.0.1", "5.136.106.145"]
 # Application definition
 
 INSTALLED_APPS = [
+    'pytest_django',
     'django_extensions',
     'djoser',
     'users.apps.UsersConfig',
@@ -111,6 +112,9 @@ AUTH_PASSWORD_VALIDATORS = [
     # },
 ]
 
+FIXTURE_DIRS = (
+   '/users/fixtures/',
+)
 # Internationalization
 # https://docs.djangoproject.com/en/3.1/topics/i18n/
 
@@ -162,3 +166,5 @@ SITE_ID = 1
 SIMPLE_JWT = {
     'ACCESS_TOKEN_LIFETIME': timedelta(days=30),
 }
+
+ACCOUNT_EMAIL_VERIFICATION = 'none'
