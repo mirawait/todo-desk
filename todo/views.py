@@ -13,10 +13,6 @@ from rest_framework.permissions import IsAuthenticated
 from todo import numbersAPI
 from todo import weatherAPI
 
-def home(request):
-    return HttpResponse('ToDo Home')
-
-
 def task(request):
     if request.method == "POST":
         if "Add" in request.POST:
