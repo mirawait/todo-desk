@@ -1,8 +1,10 @@
+from django.contrib.auth import get_user_model
 from django.utils.text import slugify
 from rest_framework import serializers
 from django.utils import timezone
 from .models import Task
-
+from users.models import User
+from django.conf import settings
 
 class TaskSerializer(serializers.Serializer):
     title = serializers.CharField(max_length=200)
@@ -10,7 +12,7 @@ class TaskSerializer(serializers.Serializer):
     date_created = serializers.DateTimeField(default=timezone.now)
     date_end = serializers.DateTimeField(default=timezone.now().strftime("%d.%m.%Y %H:%M"))
     status = serializers.CharField(max_length=15, default="In progress")
-    author = serializers.CharField(max_length=255)
+    author = serializers.PrimaryKeyRelatedField(queryset=User.objects.all())
     slug = serializers.SlugField()
 
     def create(self, validated_data):

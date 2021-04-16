@@ -1,7 +1,7 @@
 from django.db import models
 from django.urls import reverse
 from django.utils import timezone
-
+from django.conf import settings
 
 # Create your models here.
 
@@ -12,7 +12,7 @@ class Task(models.Model):
     date_created = models.DateTimeField(default=timezone.now)
     date_end = models.DateTimeField(default=timezone.now().strftime("%d.%m.%Y %H:%M"))
     status = models.CharField(max_length=15, choices=STATUS_CHOICES, default="In progress")
-    author = models.CharField(max_length=255)
+    author = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     slug = models.SlugField(unique=True)
     class Meta:
         ordering = ("-date_created",)

@@ -10,6 +10,7 @@ from rest_framework.response import Response
 from rest_framework.views import APIView
 from .serializers import TaskSerializer
 from rest_framework.permissions import IsAuthenticated
+from users.models import *
 
 from todo import numbersAPI
 from todo import weatherAPI
@@ -43,10 +44,12 @@ class TaskView(APIView):
         if slug is None:
             tasks = Task.objects.all()
             serializer = TaskSerializer(tasks, many=True)
+
             for item in serializer.data:
                 date = datetime.strptime(item.get('date_created'), "%Y-%m-%dT%H:%M:%S.%f%z")
                 item['fact'] = numbersAPI.get_fact(date.month, date.day)
                 item['weather'] = weatherAPI.get_weather('Tomsk')
+                item['author'] = str(get_object_or_404(User.objects.all(), pk=item['author']))
             return Response({"tasks": serializer.data})
         else:
             task = get_object_or_404(Task.objects.all(), slug=slug)
@@ -55,12 +58,12 @@ class TaskView(APIView):
             date = datetime.strptime(item.get('date_created'), "%Y-%m-%dT%H:%M:%S.%f%z")
             item['fact'] = numbersAPI.get_fact(date.month, date.day)
             item['weather'] = weatherAPI.get_weather('Tomsk')
+            item['author'] = str(get_object_or_404(User.objects.all(), pk=item['author']))
             return Response({"tasks": item})
 
     def post(self, request):
-        task_api = request.data.get('task')
-        token_user = request.user
-        task_api['author'] = token_user.username
+        task_api = self.request.data.get('task')
+        task_api['author'] = self.request.user.pk
         task_api['slug'] = slugify(task_api['title'])
         serializer = TaskSerializer(data=task_api)
         if serializer.is_valid(raise_exception=True):
@@ -69,8 +72,8 @@ class TaskView(APIView):
 
     def put(self, request, slug):
         saved_task = get_object_or_404(Task.objects.all(), slug=slug)
-        token_user = request.user
-        if saved_task.author == token_user.username or token_user.is_staff:
+        token_user = self.request.user.pk
+        if saved_task.author == token_user.pk or token_user.is_staff:
             data = request.data.get('task')
             serializer = TaskSerializer(instance=saved_task, data=data, partial=True)
             if serializer.is_valid(raise_exception=True):
