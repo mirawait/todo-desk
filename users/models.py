@@ -61,3 +61,6 @@ class User(AbstractBaseUser, PermissionsMixin):
             'exp': int(dt.strftime('%S'))
         }, settings.SECRET_KEY, algorithm='HS256')
         return token
+
+    def get_email(self):
+        return self.email

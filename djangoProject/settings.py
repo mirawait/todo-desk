@@ -168,3 +168,10 @@ SIMPLE_JWT = {
 }
 
 ACCOUNT_EMAIL_VERIFICATION = 'none'
+
+EMAIL_HOST = 'smtp.yandex.ru'
+EMAIL_PORT = 465
+EMAIL_HOST_USER = "SpeedyMouse@yandex.ru"
+EMAIL_HOST_PASSWORD = "rpifezkeahqoqjni"
+EMAIL_USE_TLS = False
+EMAIL_USE_SSL = True
